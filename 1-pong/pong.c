@@ -72,18 +72,6 @@ void handle_input_pong(struct Pong* pong, ALLEGRO_KEYBOARD_STATE* state)
             pong->player1.vy = 0;
         }
 
-        if (al_key_down(state, ALLEGRO_KEY_DOWN))
-        {
-            pong->player2.vy = PADDLE_SPEED;
-        }
-        else if (al_key_down(state, ALLEGRO_KEY_UP))
-        {
-            pong->player2.vy = -PADDLE_SPEED;
-        }
-        else
-        {
-            pong->player2.vy = 0;
-        }
     }
     else
     {
@@ -251,27 +239,34 @@ void cpu_input_pong(struct Pong* pong)
 
     if (pong->state == PLAY)
     {
-        if (pong->ball.x > TABLE_WIDTH / 3)
+        if (pong->ball.x > (TABLE_WIDTH) - (TABLE_WIDTH / 3))
         {
-            if ((pong->ball.y - pong->player2.y) < 0) 
+            if ((pong->ball.y - pong->player2.y) < 0)             
             {
-                pong->player2.vy -= 1;
+                pong->player2.vy -= PADDLE_SPEED;
             }
-            else if ((pong->ball.y - pong->player2.y) > PADDLE_HEIGHT) 
+            else if ((pong->ball.y - pong->player2.y) > (PADDLE_HEIGHT)) 
             {
-                pong->player2.vy += 1;
+                pong->player2.vy += PADDLE_SPEED;
             }
+            else if ((pong->ball.y - pong->player2.y) < (PADDLE_HEIGHT)) 
+            {
+            	pong->player2.vy -= (pong->player2.vy / 4);
+            }
+            else	
+            {
+            	pong->player2.vy += (pong->player2.vy / 4);
+            }	
 
-            if (pong->player2.vy > 2) 
+            if (pong->player2.vy > PADDLE_SPEED) 
             {
-                pong->player2.vy = 2;
+                pong->player2.vy = PADDLE_SPEED;
             }
-            else if (pong->player2.vy < -2) 
+            else if (pong->player2.vy < -PADDLE_SPEED) 
             {
-                pong->player2.vy = -2;
+                pong->player2.vy = -PADDLE_SPEED;
             }
-
-            pong->player2.y += pong->player2.vy;
+            
         }    
     }
 
