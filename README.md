@@ -1,2 +1,2 @@
 # VideoGameProgrammingCourse
-VideoGameProgrammingCourse
+A2023 course assignments
