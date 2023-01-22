@@ -239,7 +239,7 @@ void cpu_input_pong(struct Pong* pong)
 
     if (pong->state == PLAY)
     {
-        if (pong->ball.x > (TABLE_WIDTH) - (TABLE_WIDTH / 3))
+        if (pong->ball.x > (TABLE_WIDTH) - (TABLE_WIDTH / 2))
         {
             if ((pong->ball.y - pong->player2.y) < 0)             
             {
