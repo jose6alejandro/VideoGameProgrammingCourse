@@ -26,4 +26,6 @@ public:
 
 private:
     World world;
+    bool select_mode = false;
+ 
 };
