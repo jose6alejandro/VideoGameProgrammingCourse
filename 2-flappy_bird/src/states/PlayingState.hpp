@@ -13,6 +13,9 @@
 #include <src/Bird.hpp>
 #include <src/World.hpp>
 #include <src/states/BaseState.hpp>
+#include <src/modes/GameMode.hpp>
+#include <src/modes/NormalMode.hpp>
+#include <src/modes/HardMode.hpp>
 
 class PlayingState: public BaseState
 {
@@ -32,4 +35,7 @@ private:
     std::shared_ptr<Bird> bird;
     std::shared_ptr<World> world;
     int score{0};
+    
+    std::shared_ptr<GameMode> game_mode;
+
 };

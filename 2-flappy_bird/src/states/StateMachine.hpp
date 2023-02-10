@@ -17,6 +17,9 @@
 
 #include <src/states/BaseState.hpp>
 
+#include <src/modes/GameMode.hpp>
+#include <src/modes/NormalMode.hpp>
+
 class StateMachine
 {
 public:
@@ -32,7 +35,12 @@ public:
 
     void render(sf::RenderTarget& target) const noexcept;
 
+    void set_game_mode(bool _select_mode) noexcept;
+    
+    const bool & get_game_mode() const noexcept;
+
 private:
     std::unordered_map<std::string, StateBuilder> states;
     std::shared_ptr<BaseState> current_state{std::make_shared<BaseState>(this)};
+    bool select_mode;
 };

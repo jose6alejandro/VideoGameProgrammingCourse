@@ -11,7 +11,11 @@
 #pragma once
 
 #include <src/World.hpp>
+#include <src/Bird.hpp>
 #include <src/states/BaseState.hpp>
+#include <src/modes/GameMode.hpp>
+#include <src/modes/NormalMode.hpp>
+#include <src/modes/HardMode.hpp>
 
 class TitleScreenState: public BaseState
 {
@@ -27,5 +31,6 @@ public:
 private:
     World world;
     bool select_mode = false;
- 
+
+    std::shared_ptr<GameMode> game_mode;
 };

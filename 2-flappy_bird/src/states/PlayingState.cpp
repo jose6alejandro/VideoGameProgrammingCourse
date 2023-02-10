@@ -14,7 +14,7 @@
 #include <src/states/PlayingState.hpp>
 
 PlayingState::PlayingState(StateMachine* sm) noexcept
-    : BaseState{sm}
+    : BaseState{sm}, game_mode{nullptr}
 {
 
 }
@@ -22,28 +22,40 @@ PlayingState::PlayingState(StateMachine* sm) noexcept
 void PlayingState::enter(std::shared_ptr<World> _world, std::shared_ptr<Bird> _bird, int _score) noexcept
 {
     world = _world;
-    world->reset(true);
     score = _score;
-
+    
+    world->reset(true);
+    
     if (_bird == nullptr)
     {
         bird = std::make_shared<Bird>(
             Settings::VIRTUAL_WIDTH / 2 - Settings::BIRD_WIDTH / 2, Settings::VIRTUAL_HEIGHT / 2 - Settings::BIRD_HEIGHT / 2,
             Settings::BIRD_WIDTH, Settings::BIRD_HEIGHT
-        );
+        );  
     }
     else
     {
         bird = _bird;
     }
+
+    if (game_mode == nullptr)
+    {        
+        if (!(state_machine->get_game_mode()))
+        {
+            game_mode = std::make_shared<NormalMode>(world, bird);
+        }
+        else
+        {
+            game_mode = std::make_shared<HardMode>(world, bird);
+        }    
+        
+    }
+    
 }
 
 void PlayingState::handle_inputs(const sf::Event& event) noexcept
 {
-    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-    {
-        bird->jump();
-    }
+    game_mode->handle_input(event);
 
     if (event.type == sf::Event::KeyPressed and event.key.code == sf::Keyboard::Space) 
     {
@@ -53,8 +65,7 @@ void PlayingState::handle_inputs(const sf::Event& event) noexcept
 
 void PlayingState::update(float dt) noexcept
 {
-    bird->update(dt);
-    world->update(dt);
+    game_mode->update(dt);
 
     if (world->collides(bird->get_collision_rect()))
     {

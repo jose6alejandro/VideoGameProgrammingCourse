@@ -23,22 +23,24 @@ void TitleScreenState::handle_inputs(const sf::Event& event) noexcept
 {
     
     if (event.key.code == sf::Keyboard::Space && !select_mode)
-    {
+    {  
+        state_machine->set_game_mode(select_mode);
         state_machine->change_state("count_down"); //NormalMode
     }
 
     if (event.key.code == sf::Keyboard::Space && select_mode)
     {
-        //HardMode
+        state_machine->set_game_mode(select_mode);
+        state_machine->change_state("count_down"); //HardMode
     }
     
     
-    if (event.key.code == sf::Keyboard::Up)
+    if (event.key.code == sf::Keyboard::W)
     {
         select_mode = false;
     }
 
-    if (event.key.code == sf::Keyboard::Down)
+    if (event.key.code == sf::Keyboard::S)
     {
         select_mode = true;
     }

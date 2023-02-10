@@ -28,6 +28,10 @@ public:
     void update(float dt) noexcept;
 
     void render(sf::RenderTarget& target) const noexcept;
+    
+    void move_left() noexcept;
+    
+    void move_right() noexcept;
 
 private:
     float x;
@@ -35,6 +39,7 @@ private:
     float width;
     float height;
     float vy;
+    float vx;
     sf::Sprite sprite;
     bool jumping{false};
 };

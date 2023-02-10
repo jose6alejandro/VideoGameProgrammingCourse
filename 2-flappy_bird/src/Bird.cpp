@@ -30,6 +30,7 @@ void Bird::jump() noexcept
     }
 }
 
+
 void Bird::update(float dt) noexcept
 {
     vy += Settings::GRAVITY * dt;
@@ -42,10 +43,23 @@ void Bird::update(float dt) noexcept
     }
 
     y += vy * dt;
+    x += vx * dt;
+    vx = 0;
     sprite.setPosition(x, y);
+    
 }
 
 void Bird::render(sf::RenderTarget& target) const noexcept
 {
     target.draw(sprite);
+}
+
+void Bird::move_left() noexcept
+{
+    vx = -(Settings::MAIN_SCROLL_SPEED * 5);
+}
+    
+void Bird::move_right() noexcept
+{
+    vx = (Settings::MAIN_SCROLL_SPEED * 5);
 }
