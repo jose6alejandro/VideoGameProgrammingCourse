@@ -16,7 +16,7 @@
 class LogPair
 {
 public:
-    LogPair(float _x, float _y) noexcept;
+    LogPair(float _x, float _y, float _log_gap = 0) noexcept;
 
     bool collides(const sf::FloatRect& rect) const noexcept;
 
@@ -27,14 +27,24 @@ public:
     bool is_out_of_game() const noexcept;
 
     bool update_scored(const sf::FloatRect& rect) noexcept;
+    
+    void set_displacement(bool _displacement) noexcept; 
 
     void reset(float _x, float _y) noexcept;
+
+    
 
 private:
     float x;
     float y;
+    float log_gap;
+    
     Log top;
     Log bottom;
 
     bool scored{false};
+    bool closed_gap{true};
+    bool displacement{false}; 
+    
+
 };

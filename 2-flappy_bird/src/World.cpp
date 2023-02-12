@@ -71,7 +71,9 @@ void World::update(float dt) noexcept
 
             last_log_y = y;
 
-            logs.push_back(log_factory.create(Settings::VIRTUAL_WIDTH, y));
+            logs.push_back(log_factory.create(Settings::VIRTUAL_WIDTH, y, Settings::LOGS_GAP));
+
+            logs.back()->set_displacement(false);
         }
     }
 
@@ -121,3 +123,75 @@ void World::render(sf::RenderTarget& target) const noexcept
 
     target.draw(ground);
 }
+
+void World::update_hard_mode(float dt) noexcept
+{
+    //background.setTexture(Settings::textures["background-2"]);
+    
+    if (generate_logs) 
+    {
+        logs_spawn_timer += dt;
+
+        if (logs_spawn_timer >= log_spawn)
+        {
+            logs_spawn_timer = 0.f;
+            int logs_gap = 0;
+            std::uniform_real_distribution<float> spawn_time{Settings::TIME_TO_SPAWN_LOGS, Settings::TIME_TO_SPAWN_LOGS + 1}; //dist _x
+            std::uniform_int_distribution<int> dist{-10, 30};
+            std::uniform_int_distribution<int> gap{0, 40};
+            std::uniform_int_distribution<int> decision{0, 2};
+            bool gap_moving = decision(rng);
+            
+            if (gap_moving) 
+            {
+                logs_gap = gap(rng) + 10;
+            }
+
+            float y = std::max(-Settings::LOG_HEIGHT + 10, std::min(last_log_y + dist(rng), Settings::VIRTUAL_HEIGHT + gap(rng) - Settings::LOG_HEIGHT));
+
+            last_log_y = y;
+
+            logs.push_back(log_factory.create(Settings::VIRTUAL_WIDTH, y, Settings::LOGS_GAP + logs_gap));
+        
+            logs.back()->set_displacement(gap_moving);
+
+            log_spawn = spawn_time(rng);
+        }
+        
+    }
+
+    background_x += -Settings::BACK_SCROLL_SPEED * dt;
+
+    if (background_x <= -Settings::BACKGROUND_LOOPING_POINT)
+    {
+        background_x = 0;
+    }
+
+    background.setPosition(background_x, 0);
+
+    ground_x += -Settings::MAIN_SCROLL_SPEED * dt;
+
+    if (ground_x <= -Settings::VIRTUAL_WIDTH)
+    {
+        ground_x = 0;
+    }
+
+    ground.setPosition(ground_x, Settings::VIRTUAL_HEIGHT - Settings::GROUND_HEIGHT);
+
+    for (auto it = logs.begin(); it != logs.end(); )
+    {
+        if ((*it)->is_out_of_game())
+        {
+            auto log_pair = *it;
+            log_factory.remove(log_pair);
+            it = logs.erase(it);
+            
+        }
+        else
+        {
+            (*it)->update(dt);
+            ++it;
+        }
+    }
+}
+

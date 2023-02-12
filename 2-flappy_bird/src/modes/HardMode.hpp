@@ -13,4 +13,5 @@ class HardMode: public GameMode
         void handle_input(const sf::Event & event) noexcept override;
         void update(float dt) noexcept override;
         void print() noexcept override;
+
 };

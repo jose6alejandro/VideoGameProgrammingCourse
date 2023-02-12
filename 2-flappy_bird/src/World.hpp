@@ -37,14 +37,17 @@ public:
     void update(float dt) noexcept;
 
     void render(sf::RenderTarget& target) const noexcept;
-    
+   
+    void update_hard_mode(float dt) noexcept;
+
+    //void render_hard_mode(sf::RenderTarget& target) noexcept;
 
 private:
     bool generate_logs;
 
     sf::Sprite background;
     sf::Sprite ground;
-
+    
     float background_x{0.f};
     float ground_x{0.f};
 
@@ -56,4 +59,5 @@ private:
 
     float logs_spawn_timer{0.f};
     float last_log_y{0.f};
+    float log_spawn{0.f};
 };
